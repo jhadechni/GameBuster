@@ -27,7 +27,7 @@ namespace GameBuster.DBContext
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("");
+                optionsBuilder.UseSqlServer("Data Source=JAIMESIERRA\\SQLEXPRESS;Initial Catalog=gamebuster;Integrated Security=True");
             }
         }
 
