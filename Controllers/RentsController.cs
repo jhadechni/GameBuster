@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameBuster.DBContext;
 using GameBuster.Models;
+using AutoMapper;
+using GameBuster.DTOs;
 
 namespace GameBuster.Controllers
 {
@@ -15,23 +17,25 @@ namespace GameBuster.Controllers
     public class RentsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public RentsController(AppDbContext context)
+        public RentsController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Rents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rent>>> GetRents()
+        public async Task<ActionResult<IEnumerable<RentDTO>>> GetRents()
         {
-            
-            return await _context.Rents.Include(r => r.Customer).Include(r => r.Game).ToListAsync();
+            var results = await _context.Rents.ToListAsync();
+            return _mapper.Map<List<RentDTO>>(results);
         }
 
         // GET: api/Rents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rent>> GetRent(int id)
+        public async Task<ActionResult<RentDTO>> GetRent(int id)
         {
             var rent = await _context.Rents.FindAsync(id);
 
@@ -40,7 +44,7 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return rent;
+            return _mapper.Map<RentDTO>(rent);
         }
 
         // PUT: api/Rents/5
