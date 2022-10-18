@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameBuster.DBContext;
 using GameBuster.Models;
+using AutoMapper;
+using GameBuster.DTOs;
 
 namespace GameBuster.Controllers
 {
@@ -15,17 +17,19 @@ namespace GameBuster.Controllers
     public class GamesController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public GamesController(AppDbContext context)
+        private readonly IMapper _mapper;
+        public GamesController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Games
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGames()
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetGames()
         {
-            return await _context.Games.ToListAsync();
+            var results = await _context.Games.Include(g => g.Platforms).ToListAsync();
+            return _mapper.Map<List<GameDTO>>(results);
         }
 
         // GET: api/Games/5
