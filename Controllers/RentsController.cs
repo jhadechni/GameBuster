@@ -25,7 +25,8 @@ namespace GameBuster.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Rent>>> GetRents()
         {
-            return await _context.Rents.ToListAsync();
+            
+            return await _context.Rents.Include(r => r.Customer).Include(r => r.Game).ToListAsync();
         }
 
         // GET: api/Rents/5
