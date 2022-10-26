@@ -8,7 +8,7 @@
 		<IsPackable>false</IsPackable>
 		<SpaRoot>ClientApp\</SpaRoot>
 		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-		<SpaProxyServerUrl>http://localhost:8000</SpaProxyServerUrl>
+		<SpaProxyServerUrl>http://localhost:8080</SpaProxyServerUrl>
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -71,8 +71,6 @@
 	</Target>
 
 	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties />
-		</VisualStudio>
+		<VisualStudio><UserProperties clientapp_4package_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio>
 	</ProjectExtensions>
 </Project>

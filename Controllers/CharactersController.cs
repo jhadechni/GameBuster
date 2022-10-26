@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameBuster.DBContext;
 using GameBuster.Models;
+using AutoMapper;
+using GameBuster.DTOs;
 
 namespace GameBuster.Controllers
 {
@@ -15,22 +17,25 @@ namespace GameBuster.Controllers
     public class CharactersController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CharactersController(AppDbContext context)
+        public CharactersController(AppDbContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         // GET: api/Characters
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Character>>> GetCharacters()
+        public async Task<ActionResult<IEnumerable<CharacterDTO>>> GetCharacters()
         {
-            return await _context.Characters.ToListAsync();
+            var results = await _context.Characters.ToListAsync();
+            return _mapper.Map<List<CharacterDTO>>(results);
         }
 
         // GET: api/Characters/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetCharacter(int id)
+        public async Task<ActionResult<CharacterDTO>> GetCharacter(int id)
         {
             var character = await _context.Characters.FindAsync(id);
 
@@ -39,14 +44,16 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return character;
+            return _mapper.Map<CharacterDTO>(character);
         }
 
         // PUT: api/Characters/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCharacter(int id, Character character)
+        public async Task<IActionResult> PutCharacter(int id, CharacterDTO newCharacter)
         {
+            var character = _mapper.Map<Character>(newCharacter);
+
             if (id != character.CharacterId)
             {
                 return BadRequest();
@@ -76,12 +83,14 @@ namespace GameBuster.Controllers
         // POST: api/Characters
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Character>> PostCharacter(Character character)
+        public async Task<ActionResult<CharacterDTO>> PostCharacter(CharacterDTO newCharacter)
         {
+            var character = _mapper.Map<Character>(newCharacter);
             _context.Characters.Add(character);
             await _context.SaveChangesAsync();
+            newCharacter.CharacterId = character.CharacterId;
 
-            return CreatedAtAction("GetCharacter", new { id = character.CharacterId }, character);
+            return CreatedAtAction("GetCharacter", new { id = character.CharacterId }, newCharacter);
         }
 
         // DELETE: api/Characters/5

@@ -34,7 +34,7 @@ namespace GameBuster.Controllers
 
         // GET: api/Games/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
+        public async Task<ActionResult<GameDTO>> GetGame(int id)
         {
             var game = await _context.Games.FindAsync(id);
 
@@ -43,14 +43,16 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return game;
+            return _mapper.Map<GameDTO>(game);
         }
 
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGame(int id, Game game)
+        public async Task<IActionResult> PutGame(int id, GameDTO newGame)
         {
+            var game = _mapper.Map<Game>(newGame);
+
             if (id != game.GameId)
             {
                 return BadRequest();
@@ -80,12 +82,14 @@ namespace GameBuster.Controllers
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<ActionResult<GameDTO>> PostGame(GameDTO newGame)
         {
+            var game = _mapper.Map<Game>(newGame);
+
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetGame", new { id = game.GameId }, game);
+            newGame.GameId = game.GameId;
+            return CreatedAtAction("GetGame", new { id = game.GameId }, newGame);
         }
 
         // DELETE: api/Games/5

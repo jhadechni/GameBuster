@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameBuster.DBContext;
 using GameBuster.Models;
+using AutoMapper;
+using GameBuster.DTOs;
 
 namespace GameBuster.Controllers
 {
@@ -15,22 +17,24 @@ namespace GameBuster.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public CustomersController(AppDbContext context)
+        private readonly IMapper _mapper;
+        public CustomersController(AppDbContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            var results = await _context.Customers.ToListAsync();
+            return _mapper.Map<List<CustomerDTO>>(results);
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
 
@@ -39,14 +43,16 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return customer;
+            return _mapper.Map<CustomerDTO>(customer);
         }
 
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutCustomer(int id, CustomerDTO newCustomer)
         {
+            var customer = _mapper.Map<Customer>(newCustomer);
+
             if (id != customer.CustomerId)
             {
                 return BadRequest();
@@ -76,10 +82,13 @@ namespace GameBuster.Controllers
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<CustomerDTO>> PostCustomer(CustomerDTO newCustomer)
         {
+            var customer = _mapper.Map<Customer>(newCustomer);
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
+
+            newCustomer.CustomerId = customer.CustomerId;
 
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }

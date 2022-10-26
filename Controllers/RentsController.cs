@@ -50,8 +50,10 @@ namespace GameBuster.Controllers
         // PUT: api/Rents/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRent(int id, Rent rent)
+        public async Task<IActionResult> PutRent(int id, RentDTO newRent)
         {
+            var rent = _mapper.Map<Rent>(newRent);
+
             if (id != rent.RentId)
             {
                 return BadRequest();
@@ -81,10 +83,12 @@ namespace GameBuster.Controllers
         // POST: api/Rents
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Rent>> PostRent(Rent rent)
+        public async Task<ActionResult<RentDTO>> PostRent(RentDTO newRent)
         {
+            var rent = _mapper.Map<Rent>(newRent);
             _context.Rents.Add(rent);
             await _context.SaveChangesAsync();
+            newRent.RentId = rent.RentId;
 
             return CreatedAtAction("GetRent", new { id = rent.RentId }, rent);
         }

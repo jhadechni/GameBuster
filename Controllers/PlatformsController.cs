@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameBuster.DBContext;
 using GameBuster.Models;
+using AutoMapper;
+using GameBuster.DTOs;
 
 namespace GameBuster.Controllers
 {
@@ -15,22 +17,24 @@ namespace GameBuster.Controllers
     public class PlatformsController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public PlatformsController(AppDbContext context)
+        private readonly IMapper _mapper;
+        public PlatformsController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Platforms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Platform>>> GetPlatforms()
+        public async Task<ActionResult<IEnumerable<PlatformDTO>>> GetPlatforms()
         {
-            return await _context.Platforms.ToListAsync();
+            var results = await _context.Platforms.ToListAsync();
+            return _mapper.Map<List<PlatformDTO>>(results);
         }
 
         // GET: api/Platforms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Platform>> GetPlatform(int id)
+        public async Task<ActionResult<PlatformDTO>> GetPlatform(int id)
         {
             var platform = await _context.Platforms.FindAsync(id);
 
@@ -39,14 +43,16 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return platform;
+            return _mapper.Map<PlatformDTO>(platform);
         }
 
         // PUT: api/Platforms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlatform(int id, Platform platform)
+        public async Task<IActionResult> PutPlatform(int id, PlatformDTO newPlatform)
         {
+            var platform = _mapper.Map<Platform>(newPlatform);
+
             if (id != platform.PlatformId)
             {
                 return BadRequest();
@@ -76,10 +82,12 @@ namespace GameBuster.Controllers
         // POST: api/Platforms
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Platform>> PostPlatform(Platform platform)
+        public async Task<ActionResult<PlatformDTO>> PostPlatform(PlatformDTO newPlatform)
         {
+            var platform = _mapper.Map<Platform>(newPlatform);
             _context.Platforms.Add(platform);
             await _context.SaveChangesAsync();
+            newPlatform.PlatformId = platform.PlatformId;
 
             return CreatedAtAction("GetPlatform", new { id = platform.PlatformId }, platform);
         }
