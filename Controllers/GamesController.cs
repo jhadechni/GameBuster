@@ -46,6 +46,79 @@ namespace GameBuster.Controllers
             return _mapper.Map<GameDTO>(game);
         }
 
+        // GET: api/Customers/GetFrecuentGame
+        [HttpGet("GetFrecuentGame")]
+        public async Task<ActionResult<GameDTO>> GetFrecuentGame()
+        {
+
+            var frecuentGame = await _context.Rents.GroupBy(c => c.GameId, (x, y) => new
+            {
+                quantity = y.Count(),
+                game_id = x,
+            }).OrderByDescending(a => a.quantity).FirstOrDefaultAsync();
+
+            if (frecuentGame == null)
+            {
+                return NotFound();
+            }
+
+            var game = await _context.Games.FindAsync(frecuentGame.game_id);
+
+            return Ok(_mapper.Map<GameDTO>(game));
+        }
+
+        //GET: api/Game/GetGameWithProducer/?producer=Jaime
+        [HttpGet("GetGameWithProducer")]
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameWithProducer([FromQuery] string producer)
+        {
+            if(producer == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _context.Games.Where(g => g.Producer == producer).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<GameDTO>>(result);
+        }
+
+        //GET: api/Game/GetGameWithDirector/?director=Jaime
+        [HttpGet("GetGameWithDirector")]
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameWithDirector([FromQuery] string director)
+        {
+            if (director == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _context.Games.Where(g => g.Director == director).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<GameDTO>>(result);
+        }
+
+        //GET: api/Game/GetGameReleaseDate/?director=Jaime
+        [HttpGet("GetGameReleaseDate")]
+        public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameReleaseDate([FromQuery] DateTime date)
+        {
+            var result = await _context.Games.Where(g => g.ReleaseDate == date).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<GameDTO>>(result);
+        }
+
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

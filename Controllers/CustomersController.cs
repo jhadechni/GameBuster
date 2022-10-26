@@ -9,6 +9,8 @@ using GameBuster.DBContext;
 using GameBuster.Models;
 using AutoMapper;
 using GameBuster.DTOs;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Protocol.Core.Types;
 
 namespace GameBuster.Controllers
 {
@@ -29,7 +31,28 @@ namespace GameBuster.Controllers
         public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers()
         {
             var results = await _context.Customers.ToListAsync();
-            return _mapper.Map<List<CustomerDTO>>(results);
+            return Ok(_mapper.Map<List<CustomerDTO>>(results));
+        }
+
+        // GET: api/Customers/GetFrecuentCustomer
+        [HttpGet("GetFrecuentCustomer")]
+        public async Task<ActionResult<CustomerDTO>> GetFrecuentCustomer()
+        {
+
+            var frecuentCustomer = await _context.Rents.GroupBy(c => c.CustomerId, (x, y) => new
+            {
+                quantity = y.Count(),
+                customer_id = x,
+            }).OrderByDescending(a => a.quantity).FirstOrDefaultAsync();
+
+            if (frecuentCustomer == null)
+            {
+                return NotFound();
+            }
+
+            var client = await _context.Customers.FindAsync(frecuentCustomer.customer_id);
+
+            return Ok(_mapper.Map<CustomerDTO>(client));
         }
 
         // GET: api/Customers/5
@@ -79,6 +102,8 @@ namespace GameBuster.Controllers
             return NoContent();
         }
 
+
+
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -113,5 +138,8 @@ namespace GameBuster.Controllers
         {
             return _context.Customers.Any(e => e.CustomerId == id);
         }
+
+       
     }
+    
 }
