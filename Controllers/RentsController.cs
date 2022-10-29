@@ -30,7 +30,7 @@ namespace GameBuster.Controllers
         public async Task<ActionResult<IEnumerable<RentDTO>>> GetRents()
         {
             var results = await _context.Rents.ToListAsync();
-            return _mapper.Map<List<RentDTO>>(results);
+            return Ok(_mapper.Map<List<RentDTO>>(results));
         }
 
         // GET: api/Rents/5
@@ -44,7 +44,20 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<RentDTO>(rent);
+            return Ok(_mapper.Map<RentDTO>(rent));
+        }
+
+        [HttpGet("DailyRents")]
+        public async Task<ActionResult<IEnumerable<RentDTO>>> GetDailyRents()
+        { 
+            var rents = await _context.Rents.Where(r => EF.Functions.DateDiffDay(r.StartDate , DateTime.Now) == 0).ToListAsync();
+
+            if (rents == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<List<RentDTO>>(rents));
         }
 
         // PUT: api/Rents/5

@@ -29,7 +29,7 @@ namespace GameBuster.Controllers
         public async Task<ActionResult<IEnumerable<PlatformDTO>>> GetPlatforms()
         {
             var results = await _context.Platforms.ToListAsync();
-            return _mapper.Map<List<PlatformDTO>>(results);
+            return Ok(_mapper.Map<List<PlatformDTO>>(results));
         }
 
         // GET: api/Platforms/5
@@ -43,7 +43,7 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<PlatformDTO>(platform);
+            return Ok(_mapper.Map<PlatformDTO>(platform));
         }
 
         // PUT: api/Platforms/5

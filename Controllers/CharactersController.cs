@@ -30,7 +30,7 @@ namespace GameBuster.Controllers
         public async Task<ActionResult<IEnumerable<CharacterDTO>>> GetCharacters()
         {
             var results = await _context.Characters.ToListAsync();
-            return _mapper.Map<List<CharacterDTO>>(results);
+            return Ok(_mapper.Map<List<CharacterDTO>>(results));
         }
 
         // GET: api/Characters/5
@@ -44,7 +44,7 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<CharacterDTO>(character);
+            return Ok(_mapper.Map<CharacterDTO>(character));
         }
 
         // PUT: api/Characters/5

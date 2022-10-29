@@ -66,7 +66,7 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<CustomerDTO>(customer);
+            return Ok(_mapper.Map<CustomerDTO>(customer));
         }
 
         // PUT: api/Customers/5
