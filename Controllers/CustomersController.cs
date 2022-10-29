@@ -16,6 +16,7 @@ namespace GameBuster.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class CustomersController : ControllerBase
     {
         private readonly AppDbContext _context;

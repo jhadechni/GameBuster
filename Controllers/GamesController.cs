@@ -15,6 +15,7 @@ namespace GameBuster.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class GamesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -24,9 +25,18 @@ namespace GameBuster.Controllers
             _context = context;
             _mapper = mapper;
         }
-        
-        // GET: api/Games
+
+        /// <summary>
+        /// Return all Games
+        /// </summary>
+        /// <returns>All Games</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Games
+        /// </remarks>
+        /// <response code="200">Returns all Games</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGames()
         {
             var results = await _context.Games.Include(g => g.Platforms).ToListAsync();
@@ -59,8 +69,19 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<GameDTO>(game));
         }
 
-        // GET: api/Customers/GetFrecuentGame
+        /// <summary>
+        /// Return the most rented game
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Games/GetFrecuentGame
+        /// </remarks>
+        /// <response code="200">Returns the Game</response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetFrecuentGame")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GameDTO>> GetFrecuentGame()
         {
 
@@ -80,8 +101,22 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<GameDTO>(game));
         }
 
-        //GET: api/Game/GetGameWithProducer/?producer=Jaime
+        /// <summary>
+        /// Return a game by its producer
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <param name="producer">producer of the Game</param>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Games/GetGameWithProducer?producer=x
+        /// </remarks>
+        /// <response code="200">Returns the Game</response>
+        /// <response code="400">If any producer was sended</response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetGameWithProducer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameWithProducer([FromQuery] string producer)
         {
             if (producer == null)
@@ -99,8 +134,22 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<GameDTO>>(result));
         }
 
-        //GET: api/Game/GetGameWithDirector/?director=Jaime
+        /// <summary>
+        /// Return a game by its director
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <param name="director">director of the Game</param>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Games/GetGameWithDirector?director=x
+        /// </remarks>
+        /// <response code="200">Returns the Game</response>
+        /// <response code="400">If any director was sended</response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetGameWithDirector")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameWithDirector([FromQuery] string director)
         {
             if (director == null)
@@ -118,8 +167,22 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<GameDTO>>(result));
         }
 
-        //GET: api/Game/GetGameReleaseDate/?director=Jaime
+        /// <summary>
+        /// Return a game by its release date
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <remarks>
+        /// <param name="date">release date of the Game</param>
+        /// Sample request
+        /// GET: api/Games/GetGameReleaseDate?date=x
+        /// </remarks>
+        /// <response code="200">Returns the Game</response>
+        /// <response code="400">If any date was sended</response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetGameReleaseDate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameReleaseDate([FromQuery] DateTime date)
         {
             var result = await _context.Games.Where(g => g.ReleaseDate == date).ToListAsync();
@@ -132,8 +195,22 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<GameDTO>>(result));
         }
 
-        //GET: api/Game/GetGameWithCharacters
+        /// <summary>
+        /// Return a game by its characters
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <remarks>
+        /// <param name="characters">characters of the Game</param>
+        /// Sample request
+        /// GET: api/Games/GetGameWithCharacters?characters=x
+        /// </remarks>
+        /// <response code="200"> Returns the Game </response>
+        /// <response code="400">If any date was sended </response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetGameWithCharacters")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGameWithCharacters([FromQuery] List<string> characters)
         {
 
@@ -142,8 +219,23 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<GameDTO>>(result));
         }
 
-        //GET: api/Game/GetGameWithCharacters
+        /// <summary>
+        /// Return the least rented game by a range of years
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <remarks>
+        /// <param name="initialAge">Initial Age of the customer</param>
+        /// <param name="endAge">End Age of the customer</param> 
+        /// Sample request
+        /// GET: api/Games/GetLeastRentedGameByYears?initalAge=x?endAge=x
+        /// </remarks>
+        /// <response code="200"> Returns the Game </response>
+        /// <response code="400">If any date was sended </response>
+        /// <response code="404">If the Game was not found</response>
         [HttpGet("GetLeastRentedGameByYears")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetLeastRentedGameByYears([FromQuery] int initialAge, [FromQuery] int endAge)
         {
             if (endAge == 0)
@@ -175,9 +267,23 @@ namespace GameBuster.Controllers
             
         }
 
-        // PUT: api/Games/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update the given game by its id
+        /// </summary>
+        /// <returns>a Game</returns>
+        /// <remarks>
+        /// <param name="id">Game id</param>
+        /// <param name="newGame">Game info</param>
+        /// Sample request
+        /// PUT: api/Games/5
+        /// </remarks>
+        /// <response code="204"> Game uptaded sucefully </response>
+        /// <response code="400">If any date was sended </response>
+        /// <response code="404">If the Game was not found</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutGame(int id, GameDTO newGame)
         {
             var game = _mapper.Map<Game>(newGame);
@@ -208,9 +314,17 @@ namespace GameBuster.Controllers
             return NoContent();
         }
 
-        // POST: api/Games
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create the given game
+        /// </summary>
+        /// <remarks>
+        /// <param name="newGame">Game info</param>
+        /// Sample request
+        /// POST: api/Games
+        /// </remarks>
+        /// <response code="200"> Game created </response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<GameDTO>> PostGame(GameDTO newGame)
         {
             var game = _mapper.Map<Game>(newGame);
@@ -218,11 +332,22 @@ namespace GameBuster.Controllers
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
             newGame.GameId = game.GameId;
-            return CreatedAtAction("GetGame", new { id = game.GameId }, newGame);
+            return Ok(CreatedAtAction("GetGame", new { id = game.GameId }, newGame));
         }
 
-        // DELETE: api/Games/5
+        /// <summary>
+        /// Delete a game by its id
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Game id</param>
+        /// Sample request
+        /// DELETE: api/Games/5
+        /// </remarks>
+        /// <response code="204"> Game deleted</response>
+        /// <response code="404">If the Game was not found</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteGame(int id)
         {
             var game = await _context.Games.FindAsync(id);
