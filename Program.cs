@@ -14,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("db_connection")));
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddSwaggerGen(options =>
 {

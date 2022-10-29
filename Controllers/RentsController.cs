@@ -30,7 +30,7 @@ namespace GameBuster.Controllers
         public async Task<ActionResult<IEnumerable<RentDTO>>> GetRents()
         {
             var results = await _context.Rents.ToListAsync();
-            return _mapper.Map<List<RentDTO>>(results);
+            return Ok(_mapper.Map<List<RentDTO>>(results));
         }
 
         // GET: api/Rents/5
@@ -44,14 +44,29 @@ namespace GameBuster.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<RentDTO>(rent);
+            return Ok(_mapper.Map<RentDTO>(rent));
+        }
+
+        [HttpGet("DailyRents")]
+        public async Task<ActionResult<IEnumerable<RentDTO>>> GetDailyRents()
+        { 
+            var rents = await _context.Rents.Where(r => EF.Functions.DateDiffDay(r.StartDate , DateTime.Now) == 0).ToListAsync();
+
+            if (rents == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<List<RentDTO>>(rents));
         }
 
         // PUT: api/Rents/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRent(int id, Rent rent)
+        public async Task<IActionResult> PutRent(int id, RentDTO newRent)
         {
+            var rent = _mapper.Map<Rent>(newRent);
+
             if (id != rent.RentId)
             {
                 return BadRequest();
@@ -81,10 +96,12 @@ namespace GameBuster.Controllers
         // POST: api/Rents
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Rent>> PostRent(Rent rent)
+        public async Task<ActionResult<RentDTO>> PostRent(RentDTO newRent)
         {
+            var rent = _mapper.Map<Rent>(newRent);
             _context.Rents.Add(rent);
             await _context.SaveChangesAsync();
+            newRent.RentId = rent.RentId;
 
             return CreatedAtAction("GetRent", new { id = rent.RentId }, rent);
         }
