@@ -278,7 +278,7 @@ namespace GameBuster.Controllers
         /// PUT: api/Games/5
         /// </remarks>
         /// <response code="204"> Game uptaded sucefully </response>
-        /// <response code="400">If any date was sended </response>
+        /// <response code="400">If any changes was sended </response>
         /// <response code="404">If the Game was not found</response>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

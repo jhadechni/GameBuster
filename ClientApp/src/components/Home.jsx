@@ -9,8 +9,8 @@ function Home() {
                 <button className='btn btn-primary w-80'> View Games </button>
             </Link>
 
-            <Link to="/dailyRents">
-                <button className='btn btn-primary w-80'> View daily rents </button>
+            <Link to="/rent">
+                <button className='btn btn-primary w-80'> View rents </button>
             </Link>
 
             <Link to='/customers'>

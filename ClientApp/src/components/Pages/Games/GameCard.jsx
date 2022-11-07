@@ -42,7 +42,7 @@ function GameCard(props) {
                 </h2>
                 <p><b>Producer: </b>{props.producer}</p>
                 <p><b>Director: </b>{props.director}</p>
-                <p><b>Release year:</b> {new Date(props.releaseDate).getFullYear()}</p>
+                <p><b>Release date:</b> {new Date(props.releaseDate).toLocaleDateString()}</p>
                 <p><b>Platforms: </b>{props.platforms.length > 0 ? props.platforms.join(', ') : 'ANY'}</p>
                 <p><b>Price:</b> <kbd className='kbd text-white'>{props.price === 0 ? 'FREE' : props.price}</kbd></p>
 

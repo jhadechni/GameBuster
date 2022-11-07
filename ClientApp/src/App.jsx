@@ -8,10 +8,13 @@ import { PlatformPage } from './components/Pages/Platform/PlatformPage'
 import { CharacterPage } from './components/Pages/Character/CharacterPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { DailyRents } from './components/Pages/Rents/DailyRents';
+import { RentPage } from './components/Pages/Rents/RentPage';
+import { RentStore } from './store/Rent/rentStore'
+import { CustomerStore } from './store/Customer/customerStore'
 
 const gameController = new GameStore();
-
-
+const rentController = new RentStore()
+const customerController = new CustomerStore();
 
 function App() {
 
@@ -39,12 +42,12 @@ function App() {
 
           <Route
             path='/customers'
-            element={<CustomerPage />}
+            element={<CustomerPage customerController={customerController}/>}
           />
 
           <Route
             path='/dailyrents'
-            element={<DailyRents />}
+            element={<DailyRents rentController={rentController}/>}
           />
 
           <Route
@@ -55,6 +58,11 @@ function App() {
           <Route
             path='/character'
             element={<CharacterPage />}
+          />
+
+          <Route
+            path='/rent'
+            element={<RentPage rentController={rentController} />}
           />
 
         </Routes>
