@@ -8,5 +8,6 @@ namespace GameBuster.DTOs
     {
         public int CharacterId { get; set; }
         public string Name { get; set; } = null!;
+        public string Image { get; set; } = null!;
     }
 }
