@@ -23,7 +23,6 @@ export const RentPage = observer((props) => {
   const handleOnSubmitCreate = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    console.log(props.gameId, Object.fromEntries(formData))
     props.rentController.createRent(Object.fromEntries(formData))
     e.target.reset()
   }
@@ -35,7 +34,6 @@ export const RentPage = observer((props) => {
   const handleOnSubmitEdit = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    console.log(props.gameId, Object.fromEntries(formData))
     props.rentController.updateRent(Object.fromEntries(formData))
     e.target.reset()
   }
@@ -47,7 +45,6 @@ export const RentPage = observer((props) => {
   const handleOnSubmitDelete = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    console.log(props.gameId, Object.fromEntries(formData))
     props.rentController.deleteRent(Object.fromEntries(formData).rentId)
     e.target.reset()
   }

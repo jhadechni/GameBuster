@@ -4,7 +4,6 @@ import axios from "axios"
 export class CustomerStore {
 
     customers = []
-    dailyRents = []
 
     constructor() {
         makeAutoObservable(this)
@@ -19,48 +18,54 @@ export class CustomerStore {
         }
     }
 
-    async createRent(data) {
+    async createCustomer(data) {
         try {
-            const response = await axios.post('/api/Rents', {
-                rentId: data.rentId,
-                startDate: data.startDate,
-                returnDate: data.returnDate,
-                price: data.price,
-                gameId: data.gameId,
-                customerId: data.customerId,
-                gameId : data.gameId
+            const response = await axios.post('/api/Customers', {
+                cedula: data.cedula,
+                name: data.name,
+                surname: data.surname,
+                dateOfBirth: data.dateOfBirth,
+                address: data.address,
             })
             console.log(response.data)
-            this.fetchRents()
+            this.fetchCustomers()
         } catch (error) {
             console.log(error)
         }
     }
 
-    async deleteRent(id) {
+    async deleteCustomer(id) {
         try {
-            await axios.delete(`/api/Rents/${id}`)
-            this.fetchRents()
+            await axios.delete(`/api/Customers/${id}`)
+            this.fetchCustomers()
         } catch (error) {
             console.log(error)
         }
     }
 
-    async updateRent(newData) {
+    async updateCustomer(newData) {
         try {
-            const response = await axios.put(`/api/Rents/${newData.rentId}`, {
-                rentId: newData.rentId,
-                startDate: newData.startDate,
-                returnDate: newData.returnDate,
-                price: newData.price,
-                gameId: newData.gameId,
+            const response = await axios.put(`/api/Customers/${newData.customerId}`, {
                 customerId: newData.customerId,
-                gameId : newData.gameId
+                cedula: newData.cedula,
+                name: newData.name,
+                surname: newData.surname,
+                dateOfBirth: newData.dateOfBirth,
+                address: newData.address,
             })
             console.log(response.data)
-            this.fetchRents()
+            this.fetchCustomers()
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    async fetchFrecuentCustomer() {
+        try {
+            const response = await axios.get('/api/Customers/GetFrecuentCustomer')
+            this.customers = [response.data]
+        } catch (error) {
+            
         }
     }
 }
