@@ -23,5 +23,7 @@ namespace GameBuster.DTOs
         public decimal Price { get; set; }
 
         public List<string> Platforms { get; set; } = new List<string>();
+
+        public List<string> Characters { get; set; } = new List<string>();
     }
 }
