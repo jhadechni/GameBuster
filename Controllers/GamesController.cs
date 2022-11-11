@@ -39,7 +39,7 @@ namespace GameBuster.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GameDTO>>> GetGames()
         {
-            var results = await _context.Games.Include(g => g.Platforms).ToListAsync();
+            var results = await _context.Games.Include(g => g.Platforms).Include(g => g.Characters).ToListAsync();
             return Ok(_mapper.Map<List<GameDTO>>(results));
         }
 
@@ -255,7 +255,7 @@ namespace GameBuster.Controllers
                  GameId = g.Key
              }).OrderBy(s => s.Quantity).Select(s => s.GameId)
              .FirstOrDefaultAsync();
-            
+
             if (result == 0)
             {
                 return NotFound();
@@ -264,7 +264,7 @@ namespace GameBuster.Controllers
             var game = await _context.Games.FindAsync(result);
 
             return Ok(_mapper.Map<GameDTO>(game));
-            
+
         }
 
         /// <summary>
@@ -313,6 +313,70 @@ namespace GameBuster.Controllers
 
             return NoContent();
         }
+
+
+        /// <summary>
+        /// Asign characters to a game
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Game id</param>
+        /// Sample request
+        /// PUT: api/Games/1/AddCharacter
+        /// </remarks>
+        /// <response code="200"> Game created </response>
+        [HttpPut("{id}/AddCharacter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AsignCharacterToAGame(int id, [FromBody] int characterId)
+        {
+            if (characterId == 0) { return BadRequest(); }
+
+            var game = await _context.Games.Include(c => c.Characters).Where(g => g.GameId == id).FirstOrDefaultAsync();
+
+            if (game.Characters.Any(c => c.CharacterId == characterId)) { return Conflict("character is alredy in the game"); }
+
+            if (game == null) { return NotFound("Game not found"); }
+
+            var character = await _context.Characters.FindAsync(characterId);
+
+            if (character == null) { return NotFound("Character not found"); }
+
+            _context.Games.Update(game);
+            game.Characters.Add(character);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Asign platofrorm to a game
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Game id</param>
+        /// Sample request
+        /// PUT: api/Games/1/AddPlatform
+        /// </remarks>
+        /// <response code="200"> Game created </response>
+        [HttpPut("{id}/AddPlatform")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AsignPlatfotmToAGame(int id, [FromBody] int platformId)
+        {
+            if (platformId == 0) { return BadRequest(); }
+
+            var game = await _context.Games.Include(c => c.Platforms).Where(g => g.GameId == id).FirstOrDefaultAsync();
+
+            if (game == null) { return NotFound("Game not found"); }
+
+            if (game.Platforms.Any(c => c.PlatformId == platformId)) { return Conflict("platform is alredy in the game"); }
+
+            var platform = await _context.Platforms.FindAsync(platformId);
+
+            if (platform == null) { return NotFound("platform not found"); }
+
+            _context.Games.Update(game);
+            game.Platforms.Add(platform);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
 
         /// <summary>
         /// Create the given game
