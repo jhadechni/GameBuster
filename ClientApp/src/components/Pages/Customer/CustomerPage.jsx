@@ -4,6 +4,7 @@ import { Table } from '../../reusables/Table';
 import { customerTableColumns, customerMapper } from '../../reusables/gridConverter';
 import { Link } from 'react-router-dom';
 import { Modal } from '../../reusables/Modal';
+import { toast, ToastContainer } from 'react-toastify';
 
 export const CustomerPage = observer((props) => {
 
@@ -25,6 +26,7 @@ export const CustomerPage = observer((props) => {
     const formData = new FormData(e.target)
     props.customerController.createCustomer(Object.fromEntries(formData))
     e.target.reset()
+    ToogleModalCreate()
   }
 
   const ToogleModalEdit = () => {
@@ -36,6 +38,7 @@ export const CustomerPage = observer((props) => {
     const formData = new FormData(e.target)
     props.customerController.updateCustomer(Object.fromEntries(formData))
     e.target.reset()
+    ToogleModalEdit()
   }
 
   const ToogleModalDelete = () => {
@@ -47,6 +50,7 @@ export const CustomerPage = observer((props) => {
     const formData = new FormData(e.target)
     props.customerController.deleteCustomer(Object.fromEntries(formData).id)
     e.target.reset()
+    ToogleModalDelete()
   }
 
   const handleOnFrecuent = () => {
@@ -60,10 +64,11 @@ export const CustomerPage = observer((props) => {
   return (
     <div>
       <h1 className='text-4xl font-bold text-center md:my-8 my-4'>Customers</h1>
-
+      <ToastContainer/>
       <div className='flex flex-wrap gap-7 md:mx-[10rem] my-8'>
 
         <button className='btn btn-primary w-70' onClick={handleOnAllCustomers}> View All Customers </button>
+        
         <button className='btn btn-primary w-70' onClick={handleOnFrecuent}> View Frecuent Customer </button>
 
 
@@ -91,7 +96,7 @@ export const CustomerPage = observer((props) => {
             </div>
           </form>
         </Modal>
-
+        
 
         <button className='btn btn-primary w-70' onClick={ToogleModalEdit}> Update a customer </button>
         <Modal OnClose={ToogleModalEdit} show={showModalEdit} title='Update a customer'>
@@ -113,7 +118,7 @@ export const CustomerPage = observer((props) => {
                 className="bg-primary text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="submit"
               >
-                create
+                update
               </button>
             </div>
           </form>

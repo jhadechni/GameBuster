@@ -320,21 +320,22 @@ namespace GameBuster.Controllers
         /// </summary>
         /// <remarks>
         /// <param name="id">Game id</param>
+        /// <param name="characterId">character Id</param>
         /// Sample request
         /// PUT: api/Games/1/AddCharacter
         /// </remarks>
         /// <response code="200"> Game created </response>
-        [HttpPut("{id}/AddCharacter")]
+        [HttpPut("{id}/AddCharacter/{characterId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AsignCharacterToAGame(int id, [FromBody] int characterId)
+        public async Task<IActionResult> AsignCharacterToAGame(int id, int characterId)
         {
             if (characterId == 0) { return BadRequest(); }
 
             var game = await _context.Games.Include(c => c.Characters).Where(g => g.GameId == id).FirstOrDefaultAsync();
 
-            if (game.Characters.Any(c => c.CharacterId == characterId)) { return Conflict("character is alredy in the game"); }
-
             if (game == null) { return NotFound("Game not found"); }
+
+            if (game.Characters.Any(c => c.CharacterId == characterId)) { return Conflict("character is alredy in the game"); }
 
             var character = await _context.Characters.FindAsync(characterId);
 
@@ -351,13 +352,14 @@ namespace GameBuster.Controllers
         /// </summary>
         /// <remarks>
         /// <param name="id">Game id</param>
+        /// <param name="platformId">platform Id</param>
         /// Sample request
         /// PUT: api/Games/1/AddPlatform
         /// </remarks>
         /// <response code="200"> Game created </response>
-        [HttpPut("{id}/AddPlatform")]
+        [HttpPut("{id}/AddPlatform/{platformId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AsignPlatfotmToAGame(int id, [FromBody] int platformId)
+        public async Task<IActionResult> AsignPlatfotmToAGame(int id, int platformId)
         {
             if (platformId == 0) { return BadRequest(); }
 

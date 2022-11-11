@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx"
 import axios from "axios"
-
+import { updateMessage, deleteMessage, errorMessage, createMessage, genericMessage } from '../../components/reusables/toaster'
 export class RentStore {
 
     rents = []
@@ -16,6 +16,7 @@ export class RentStore {
             this.rents = response.data
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -25,6 +26,7 @@ export class RentStore {
             this.dailyRents = response.data
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -41,17 +43,21 @@ export class RentStore {
             })
             console.log(response.data)
             this.fetchRents()
+            createMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
     async deleteRent(id) {
         try {
-            await axios.delete(`/api/Rents/${id}`)
+            const response = await axios.delete(`/api/Rents/${id}`)
             this.fetchRents()
+            deleteMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -68,8 +74,10 @@ export class RentStore {
             })
             console.log(response.data)
             this.fetchRents()
+            updateMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 }

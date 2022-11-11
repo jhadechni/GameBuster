@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx"
 import axios from "axios"
-
+import { updateMessage, deleteMessage, errorMessage, createMessage, genericMessage } from '../../components/reusables/toaster'
 export class CustomerStore {
 
     customers = []
@@ -15,6 +15,7 @@ export class CustomerStore {
             this.customers = response.data
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -29,17 +30,21 @@ export class CustomerStore {
             })
             console.log(response.data)
             this.fetchCustomers()
+            createMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
     async deleteCustomer(id) {
         try {
-            await axios.delete(`/api/Customers/${id}`)
+            const response = await axios.delete(`/api/Customers/${id}`)
             this.fetchCustomers()
+            deleteMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -53,10 +58,11 @@ export class CustomerStore {
                 dateOfBirth: newData.dateOfBirth,
                 address: newData.address,
             })
-            console.log(response.data)
             this.fetchCustomers()
+            updateMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -65,7 +71,7 @@ export class CustomerStore {
             const response = await axios.get('/api/Customers/GetFrecuentCustomer')
             this.customers = [response.data]
         } catch (error) {
-            
+            errorMessage(error)
         }
     }
 }

@@ -11,10 +11,14 @@ import { DailyRents } from './components/Pages/Rents/DailyRents';
 import { RentPage } from './components/Pages/Rents/RentPage';
 import { RentStore } from './store/Rent/rentStore'
 import { CustomerStore } from './store/Customer/customerStore'
+import { CharacterStore } from './store/Character/charactersStore'
+import { PlatformStore } from './store/Platform/platformStore';
 
 const gameController = new GameStore();
 const rentController = new RentStore()
 const customerController = new CustomerStore();
+const characterController = new CharacterStore();
+const platformController = new PlatformStore();
 
 function App() {
 
@@ -42,22 +46,22 @@ function App() {
 
           <Route
             path='/customers'
-            element={<CustomerPage customerController={customerController}/>}
+            element={<CustomerPage customerController={customerController} />}
           />
 
           <Route
             path='/dailyrents'
-            element={<DailyRents rentController={rentController}/>}
+            element={<DailyRents rentController={rentController} />}
           />
 
           <Route
             path='/platforms'
-            element={<PlatformPage />}
+            element={<PlatformPage platformController={platformController} />}
           />
 
           <Route
             path='/character'
-            element={<CharacterPage />}
+            element={<CharacterPage characterController={characterController} />}
           />
 
           <Route

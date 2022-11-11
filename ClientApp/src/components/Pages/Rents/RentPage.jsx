@@ -4,11 +4,11 @@ import { Table } from '../../reusables/Table';
 import { rentTableColumns, rentMapper } from '../../reusables/gridConverter';
 import { Link } from 'react-router-dom';
 import { Modal } from '../../reusables/Modal';
-
+import { toast, ToastContainer } from 'react-toastify';
 export const RentPage = observer((props) => {
 
   useEffect(() => {
-    props.rentController.fetchRents()
+    props.platformController.fetchPlatforms()
   }, [])
 
   const [showModalEdit, setShowModalEdit] = useState(false)
@@ -25,6 +25,7 @@ export const RentPage = observer((props) => {
     const formData = new FormData(e.target)
     props.rentController.createRent(Object.fromEntries(formData))
     e.target.reset()
+    ToogleModalCreate()
   }
 
   const ToogleModalEdit = () => {
@@ -36,6 +37,7 @@ export const RentPage = observer((props) => {
     const formData = new FormData(e.target)
     props.rentController.updateRent(Object.fromEntries(formData))
     e.target.reset()
+    ToogleModalEdit()
   }
 
   const ToogleModalDelete = () => {
@@ -47,12 +49,14 @@ export const RentPage = observer((props) => {
     const formData = new FormData(e.target)
     props.rentController.deleteRent(Object.fromEntries(formData).rentId)
     e.target.reset()
+    ToogleModalDelete()
   }
 
   //console.log(props.rentController.rents.length)
   return (
     <div>
       <h1 className='text-4xl font-bold text-center md:my-8 my-4'>Rents</h1>
+      <ToastContainer/>
       <div className='flex flex-wrap flex-row gap-[6.2rem] md:mx-[10rem] mx-4'>
         <button className='btn btn-primary w-80' onClick={ToogleModalCreate} > Create a rent </button>
         <Modal OnClose={ToogleModalCreate} show={showModalCreate} title='Create a rent'>
@@ -79,7 +83,6 @@ export const RentPage = observer((props) => {
             </div>
           </form>
         </Modal>
-
 
 
         <button className='btn btn-primary w-80' onClick={ToogleModalDelete}> delete a rent </button>

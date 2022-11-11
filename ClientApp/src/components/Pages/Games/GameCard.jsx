@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { DeleteModal } from '../../reusables/DeleteModal'
 import { useState } from 'react'
 import { Modal } from '../../reusables/Modal'
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function GameCard(props) {
-
-
 
     const [showModal, setShowModal] = useState(false)
     const [showModalEdit, setShowModalEdit] = useState(false)
@@ -19,18 +19,20 @@ function GameCard(props) {
         setShowModalEdit((prev) => !prev)
     }
 
-    const OnConfirm = () => {
+    const OnConfirm = async () => {
         console.log(props.gameId)
         ToogleModal()
-        props.onDelete(props.gameId)
+        await props.onDelete(props.gameId)
+        
     }
 
 
-    const handleOnSubmitEdit = (e) =>{
+    const handleOnSubmitEdit = (e) => {
         e.preventDefault()
         const formData = new FormData(e.target)
         props.onEdit(props.gameId, Object.fromEntries(formData))
         e.target.reset()
+        ToogleModalEdit()
     }
 
 
@@ -44,15 +46,16 @@ function GameCard(props) {
                 <p><b>Director: </b>{props.director}</p>
                 <p><b>Release date:</b> {new Date(props.releaseDate).toLocaleDateString()}</p>
                 <p><b>Platforms: </b>{props.platforms.length > 0 ? props.platforms.join(', ') : 'ANY'}</p>
+                <p><b>Characters: </b>{props.characters.length > 0 ? props.characters.join(', ') : 'ANY'}</p>
                 <p><b>Price:</b> <kbd className='kbd text-white'>{props.price === 0 ? 'FREE' : props.price}</kbd></p>
 
                 <div className="card-actions justify-end">
                     <label htmlFor="delete-modal" className="btn btn-primary" onClick={ToogleModal}>delete</label>
                     <DeleteModal OnConfirm={OnConfirm} OnClose={ToogleModal} show={showModal} />
-
+                    <ToastContainer />
                     <label htmlFor="delete-modal" className="btn" onClick={ToogleModalEdit}>edit</label>
 
-                    <Modal OnClose={ToogleModalEdit} show={showModalEdit} title ='Edit a game'> 
+                    <Modal OnClose={ToogleModalEdit} show={showModalEdit} title='Edit a game'>
                         <form onSubmit={handleOnSubmitEdit}>
                             <input type="text" placeholder="Name" name='name' className="input input-bordered w-full max-w-xs" key={'name'} />
                             <p className='text-white'>Release date</p>
@@ -74,10 +77,7 @@ function GameCard(props) {
                                     Save Changes
                                 </button>
                             </div>
-
                         </form>
-
-
                     </Modal>
                 </div>
 

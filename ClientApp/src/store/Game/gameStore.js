@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx"
 import axios from "axios"
-
+import { updateMessage, deleteMessage, errorMessage, createMessage } from '../../components/reusables/toaster'
 export class GameStore {
 
     games = []
@@ -9,7 +9,6 @@ export class GameStore {
         makeAutoObservable(this)
     }
 
-
     async fetchGames() {
         try {
             const response = await axios.get('/api/Games')
@@ -17,6 +16,7 @@ export class GameStore {
 
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -26,6 +26,7 @@ export class GameStore {
             this.games = [response.data]
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -36,6 +37,7 @@ export class GameStore {
 
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -50,6 +52,7 @@ export class GameStore {
 
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -60,6 +63,7 @@ export class GameStore {
 
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -69,6 +73,7 @@ export class GameStore {
             this.games = response.data
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -79,15 +84,18 @@ export class GameStore {
             this.games = [response.data]
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
     async deleteGame(id) {
         try {
-            await axios.delete('/api/Games/'.concat(id))
+            const response = await axios.delete('/api/Games/'.concat(id))
             this.games = this.games.filter(g => g.gameId !== id)
+            deleteMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -102,10 +110,12 @@ export class GameStore {
                 company: newData.company,
                 price: newData.price
             })
-            console.log(response.data)
             this.fetchGames()
+            updateMessage(response)
+
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
     }
 
@@ -121,8 +131,10 @@ export class GameStore {
             })
             console.log(response.data)
             this.fetchGames()
+            createMessage(response)
         } catch (error) {
             console.log(error)
+            errorMessage(error)
         }
 
     }
