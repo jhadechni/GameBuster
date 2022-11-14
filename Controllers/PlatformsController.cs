@@ -14,6 +14,7 @@ namespace GameBuster.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class PlatformsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -24,7 +25,15 @@ namespace GameBuster.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Platforms
+        /// <summary>
+        /// Return all platforms
+        /// </summary>
+        /// <returns>All Platforms</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Platforms
+        /// </remarks>
+        /// <response code="200">Returns all Platforms</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlatformDTO>>> GetPlatforms()
         {
@@ -32,7 +41,17 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<PlatformDTO>>(results));
         }
 
-        // GET: api/Platforms/5
+        /// <summary>
+        /// Return a Platform by its id
+        /// </summary>
+        /// <param name="id">Id of the Platform</param>
+        /// <returns>a Platform</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Platforms/5
+        /// </remarks>
+        /// <response code="200">Returns the platform</response>
+        /// <response code="404">If the platform was not found</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<PlatformDTO>> GetPlatform(int id)
         {
@@ -46,8 +65,19 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<PlatformDTO>(platform));
         }
 
-        // PUT: api/Platforms/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update the given platform by its id
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// <param name="id">Platform id</param>
+        /// <param name="newPlatform">Platform info</param>
+        /// Sample request
+        /// PUT: api/Platforms/5
+        /// </remarks>
+        /// <response code="204">Platform uptaded sucefully </response>
+        /// <response code="400">If any platform was sended </response>
+        /// <response code="404">If the platform was not found</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlatform(int id, PlatformDTO newPlatform)
         {
@@ -79,8 +109,15 @@ namespace GameBuster.Controllers
             return NoContent();
         }
 
-        // POST: api/Platforms
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create the given Platform
+        /// </summary>
+        /// <remarks>
+        /// <param name="newPlatform">Platform info</param>
+        /// Sample request
+        /// POST: api/Platforms
+        /// </remarks>
+        /// <response code="200"> Platform created </response>
         [HttpPost]
         public async Task<ActionResult<PlatformDTO>> PostPlatform(PlatformDTO newPlatform)
         {
@@ -92,7 +129,16 @@ namespace GameBuster.Controllers
             return CreatedAtAction("GetPlatform", new { id = platform.PlatformId }, platform);
         }
 
-        // DELETE: api/Platforms/5
+        /// <summary>
+        /// Delete a Platform by its id
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Platform id</param>
+        /// Sample request
+        /// DELETE: api/Platforms/5
+        /// </remarks>
+        /// <response code="204">Platform deleted</response>
+        /// <response code="404">If the platform was not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlatform(int id)
         {
