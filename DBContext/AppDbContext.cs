@@ -39,8 +39,8 @@ namespace GameBuster.DBContext
                     .WithMany(p => p.Games)
                     .UsingEntity<Dictionary<string, object>>(
                         "CharacterXgame",
-                        l => l.HasOne<Character>().WithMany().HasForeignKey("CharacterId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_CharacterXGame_Character"),
-                        r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_CharacterXGame_Game"),
+                        l => l.HasOne<Character>().WithMany().HasForeignKey("CharacterId").HasConstraintName("FK_CharacterXGame_Character"),
+                        r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").HasConstraintName("FK_CharacterXGame_Game"),
                         j =>
                         {
                             j.HasKey("GameId", "CharacterId");
@@ -56,8 +56,8 @@ namespace GameBuster.DBContext
                     .WithMany(p => p.Games)
                     .UsingEntity<Dictionary<string, object>>(
                         "PlatformXgame",
-                        l => l.HasOne<Platform>().WithMany().HasForeignKey("PlatformId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_PlatformXGame_Platform"),
-                        r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_PlatformXGame_Game"),
+                        l => l.HasOne<Platform>().WithMany().HasForeignKey("PlatformId").HasConstraintName("FK_PlatformXGame_Platform"),
+                        r => r.HasOne<Game>().WithMany().HasForeignKey("GameId").HasConstraintName("FK_PlatformXGame_Game"),
                         j =>
                         {
                             j.HasKey("GameId", "PlatformId");

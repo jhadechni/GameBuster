@@ -8,7 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 export const RentPage = observer((props) => {
 
   useEffect(() => {
-    props.platformController.fetchPlatforms()
+    props.rentController.fetchRents()
   }, [])
 
   const [showModalEdit, setShowModalEdit] = useState(false)

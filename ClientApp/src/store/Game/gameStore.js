@@ -4,12 +4,14 @@ import { updateMessage, deleteMessage, errorMessage, createMessage } from '../..
 export class GameStore {
 
     games = []
+    isLoading = true
 
     constructor() {
         makeAutoObservable(this)
     }
 
     async fetchGames() {
+        this.isLoading = true
         try {
             const response = await axios.get('/api/Games')
             this.games = response.data
@@ -18,6 +20,8 @@ export class GameStore {
             console.log(error)
             errorMessage(error)
         }
+        finally { this.isLoading = false }
+
     }
 
     async fetchMostRentedGame() {

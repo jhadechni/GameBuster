@@ -26,7 +26,15 @@ namespace GameBuster.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Rents
+        /// <summary>
+        /// Return all rents
+        /// </summary>
+        /// <returns>All rents</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Rents
+        /// </remarks>
+        /// <response code="200">Returns all rents</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RentDTO>>> GetRents()
         {
@@ -34,7 +42,17 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<RentDTO>>(results));
         }
 
-        // GET: api/Rents/5
+        /// <summary>
+        /// Return a rent by its id
+        /// </summary>
+        /// <param name="id">Id of the rent</param>
+        /// <returns>a rent</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Rents/5
+        /// </remarks>
+        /// <response code="200">Returns the rent</response>
+        /// <response code="404">If the rent was not found</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<RentDTO>> GetRent(int id)
         {
@@ -48,6 +66,15 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<RentDTO>(rent));
         }
 
+        /// <summary>
+        /// Return all daily rents
+        /// </summary>
+        /// <returns>All daily rents</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Rents/DailyRents
+        /// </remarks>
+        /// <response code="200">Returns all daily rents</response>
         [HttpGet("DailyRents")]
         public async Task<ActionResult<IEnumerable<RentDTO>>> GetDailyRents()
         { 
@@ -61,8 +88,19 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<RentDTO>>(rents));
         }
 
-        // PUT: api/Rents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update the given rent by its id
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// <param name="id">Rent id</param>
+        /// <param name="newRent">Rent info</param>
+        /// Sample request
+        /// PUT: api/Rents/5
+        /// </remarks>
+        /// <response code="204">Rent uptaded sucefully </response>
+        /// <response code="400">If any rent was sended </response>
+        /// <response code="404">If the rent was not found</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRent(int id, RentDTO newRent)
         {
@@ -94,8 +132,15 @@ namespace GameBuster.Controllers
             return NoContent();
         }
 
-        // POST: api/Rents
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create the given rent
+        /// </summary>
+        /// <remarks>
+        /// <param name="newRent">Rent info</param>
+        /// Sample request
+        /// POST: api/Rents
+        /// </remarks>
+        /// <response code="200"> Rent created </response>
         [HttpPost]
         public async Task<ActionResult<RentDTO>> PostRent(RentDTO newRent)
         {
@@ -107,7 +152,16 @@ namespace GameBuster.Controllers
             return CreatedAtAction("GetRent", new { id = rent.RentId }, rent);
         }
 
-        // DELETE: api/Rents/5
+        /// <summary>
+        /// Delete a Rent by its id
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Rent id</param>
+        /// Sample request
+        /// DELETE: api/Rents/5
+        /// </remarks>
+        /// <response code="204">Rent deleted</response>
+        /// <response code="404">If the rent was not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRent(int id)
         {

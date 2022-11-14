@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Modal } from '../../reusables/Modal'
 import { CharacterCards } from './CharacterCards'
+import Loader from '../../reusables/Loader'
 
 export const CharacterPage = (props) => {
 
@@ -14,13 +15,11 @@ export const CharacterPage = (props) => {
     setShowModal((prev) => !prev)
   }
 
-
   const createACharacter = (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     props.characterController.createCharacter(Object.fromEntries(formData))
     e.target.reset()
-
   }
 
   return (

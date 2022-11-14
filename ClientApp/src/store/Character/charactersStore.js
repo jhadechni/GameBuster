@@ -5,19 +5,22 @@ import { updateMessage, deleteMessage, errorMessage, createMessage, genericMessa
 export class CharacterStore {
 
     characters = []
+    isLoading = true
 
     constructor() {
         makeAutoObservable(this)
     }
 
     async fetchCharacters() {
+        this.isLoading = true
         try {
             const response = await axios.get('/api/Characters')
             this.characters = response.data
         } catch (error) {
             console.log(error)
             errorMessage(error)
-        }
+        } 
+        finally { this.isLoading = false }
     }
 
     async updateCharacter(id, newData) {

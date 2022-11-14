@@ -27,7 +27,15 @@ namespace GameBuster.Controllers
             _context = context;
         }
 
-        // GET: api/Customers
+        /// <summary>
+        /// Return all Customers
+        /// </summary>
+        /// <returns>All Customers</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Customers
+        /// </remarks>
+        /// <response code="200">Returns all Customers</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers()
         {
@@ -35,7 +43,16 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<List<CustomerDTO>>(results));
         }
 
-        // GET: api/Customers/GetFrecuentCustomer
+        /// <summary>
+        /// Return the frecuent customer
+        /// </summary>
+        /// <returns>a Customer</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Customers/GetFrecuentCustomer
+        /// </remarks>
+        /// <response code="200">Returns the frecuent customer</response>
+        /// <response code="404">If the Customer was not found</response>
         [HttpGet("GetFrecuentCustomer")]
         public async Task<ActionResult<CustomerDTO>> GetFrecuentCustomer()
         {
@@ -56,7 +73,17 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<CustomerDTO>(client));
         }
 
-        // GET: api/Customers/5
+         /// <summary>
+        /// Return a customer by its id
+        /// </summary>
+        /// <param name="id">Id of the Customer</param>
+        /// <returns>a Customer</returns>
+        /// <remarks>
+        /// Sample request
+        /// GET: api/Customers/5
+        /// </remarks>
+        /// <response code="200">Returns the Customer</response>
+        /// <response code="404">If the Customer was not found</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> GetCustomer(int id)
         {
@@ -70,8 +97,20 @@ namespace GameBuster.Controllers
             return Ok(_mapper.Map<CustomerDTO>(customer));
         }
 
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
+        /// <summary>
+        /// Update the given Customer by its id
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// <param name="id">Customer id</param>
+        /// <param name="newCustomer">Customer info</param>
+        /// Sample request
+        /// PUT: api/Customers/5
+        /// </remarks>
+        /// <response code="204"> Customer uptaded sucefully </response>
+        /// <response code="400">If any changes was sended </response>
+        /// <response code="404">If the Customer was not found</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, CustomerDTO newCustomer)
         {
@@ -104,9 +143,15 @@ namespace GameBuster.Controllers
         }
 
 
-
-        // POST: api/Customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create the given Customer
+        /// </summary>
+        /// <remarks>
+        /// <param name="newCustomer">Customer info</param>
+        /// Sample request
+        /// POST: api/Customers
+        /// </remarks>
+        /// <response code="200"> Customer created </response>
         [HttpPost]
         public async Task<ActionResult<CustomerDTO>> PostCustomer(CustomerDTO newCustomer)
         {
@@ -119,7 +164,16 @@ namespace GameBuster.Controllers
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
-        // DELETE: api/Customers/5
+        /// <summary>
+        /// Delete a Customer by its id
+        /// </summary>
+        /// <remarks>
+        /// <param name="id">Customer id</param>
+        /// Sample request
+        /// DELETE: api/Customers/5
+        /// </remarks>
+        /// <response code="204"> Customer deleted</response>
+        /// <response code="404">If the Customer was not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {

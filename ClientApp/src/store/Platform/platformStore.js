@@ -40,11 +40,11 @@ export class PlatformStore {
         }
     }
 
-    async updatePlatform(id, newType) {
+    async updatePlatform(data) {
         try {
-            const response = await axios.put(`/api/Platforms/${id}`, {
-                platformId: id,
-                type: newType
+            const response = await axios.put(`/api/Platforms/${data.platformId}`, {
+                platformId: parseInt(data.platformId),
+                type: data.type
             })
             updateMessage(response)
             this.fetchPlatforms()

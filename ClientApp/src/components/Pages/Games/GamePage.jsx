@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { GameCards } from './GameCards';
 import { observer } from "mobx-react-lite"
 import { InputStore } from '../../../store/Game/inputStore'
+import Loader from '../../reusables/Loader'
 
 export const GamePage = observer((props) => {
 
@@ -44,6 +45,9 @@ export const GamePage = observer((props) => {
         e.target.reset()
     }
 
+    if (props.gameController.isLoading) {
+        return <Loader />
+    }
 
     return (
         <div>

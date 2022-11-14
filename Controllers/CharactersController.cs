@@ -73,7 +73,7 @@ namespace GameBuster.Controllers
         /// <summary>
         /// Update the given Character by its id
         /// </summary>
-        /// <returns>a Character</returns>
+        /// <returns></returns>
         /// <remarks>
         /// <param name="id">Characters id</param>
         /// <param name="newCharacter">Character info</param>
