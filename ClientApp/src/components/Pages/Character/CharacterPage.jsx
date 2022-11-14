@@ -20,6 +20,7 @@ export const CharacterPage = (props) => {
     const formData = new FormData(e.target)
     props.characterController.createCharacter(Object.fromEntries(formData))
     e.target.reset()
+    ToogleModal()
   }
 
   return (

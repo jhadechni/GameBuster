@@ -36,7 +36,7 @@ function CharacterCard(props) {
         const formData = new FormData(e.target)
         props.onEdit(props.characterId, Object.fromEntries(formData))
         e.target.reset()
-        ToogleModalDelete()
+        ToogleModalEdit()
     }
 
 
