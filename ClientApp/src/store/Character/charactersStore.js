@@ -66,6 +66,7 @@ export class CharacterStore {
                 image: data.image
             })
             createMessage(response)
+            this.fetchCharacters()
         } catch (error) {
             console.log(error)
             errorMessage(error)
